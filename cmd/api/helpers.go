@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -15,6 +16,8 @@ import (
 
 var (
 	ErrInvalidMediaType = errors.New("malformed media type")
+	ErrUnknownFileType  = errors.New("cannot determine file type")
+	ErrNotExist         = errors.New("file doesn't exist")
 )
 
 func saveToDisc(file multipart.File, base string, ext string, destDir string) (string, error) {
@@ -92,4 +95,32 @@ func serverError(w http.ResponseWriter, err error) {
 func decodePostForm(w http.ResponseWriter, r *http.Request) error {
 	r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
 	return r.ParseMultipartForm(maxMemory)
+}
+
+const (
+	_ = iota
+	isRegular
+	isDir
+	isSymbolic
+)
+
+func fileType(name string) (int, error) {
+	fi, err := os.Lstat(name)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return 0, ErrNotExist
+		}
+		return 0, err
+	}
+
+	switch mode := fi.Mode(); {
+	case mode.IsRegular():
+		return isRegular, nil
+	case mode.IsDir():
+		return isDir, nil
+	case mode&fs.ModeSymlink != 0:
+		return isSymbolic, nil
+	}
+
+	return 0, ErrUnknownFileType
 }
