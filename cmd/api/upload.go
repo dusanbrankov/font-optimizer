@@ -2,12 +2,14 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	_ "image/jpeg"
 	_ "image/png"
-	"log"
+	"io"
 	"net/http"
 	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 
 	"golang.org/x/image/font/sfnt"
 )
@@ -20,6 +22,8 @@ import (
 // 	signatureWOFF = []byte{0x77, 0x4F, 0x46, 0x46}
 // 	signatueWOFF2 = []byte{0x77, 0x4F, 0x46, 0x32}
 // )
+
+var filenameRX = regexp.MustCompile(`^[0-9A-Za-z_\-\s]+$`)
 
 func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 	if err := decodePostForm(w, r); err != nil {
@@ -79,15 +83,10 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dest, err := saveToDisc(file, ext)
+	data, err := io.ReadAll(file)
 	if err != nil {
 		serverError(w, err)
 		return
-	}
-
-	data, err := os.ReadFile(dest)
-	if err != nil {
-		log.Fatal(err)
 	}
 
 	font, err := sfnt.Parse(data)
@@ -98,36 +97,49 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	var buf sfnt.Buffer
 
-	nameID := func(name sfnt.NameID) string {
-		n, _ := font.Name(&buf, name)
-		return n
+	fontFamily, err := font.Name(&buf, sfnt.NameIDTypographicFamily)
+	if err != nil {
+		if errors.Is(err, sfnt.ErrNotFound) {
+			fontFamily = "Unknown"
+		} else {
+			serverError(w, err)
+			return
+		}
 	}
 
-	fmt.Println("NameIDCopyright", nameID(sfnt.NameIDCopyright))
-	fmt.Println("NameIDFamily", nameID(sfnt.NameIDFamily))
-	fmt.Println("NameIDSubfamily", nameID(sfnt.NameIDSubfamily))
-	fmt.Println("NameIDUniqueIdentifier", nameID(sfnt.NameIDUniqueIdentifier))
-	fmt.Println("NameIDFull", nameID(sfnt.NameIDFull))
-	fmt.Println("NameIDVersion", nameID(sfnt.NameIDVersion))
-	fmt.Println("NameIDPostScript", nameID(sfnt.NameIDPostScript))
-	fmt.Println("NameIDTrademark", nameID(sfnt.NameIDTrademark))
-	fmt.Println("NameIDManufacturer", nameID(sfnt.NameIDManufacturer))
-	fmt.Println("NameIDDesigner", nameID(sfnt.NameIDDesigner))
-	fmt.Println("NameIDDescription", nameID(sfnt.NameIDDescription))
-	fmt.Println("NameIDVendorURL", nameID(sfnt.NameIDVendorURL))
-	fmt.Println("NameIDDesignerURL", nameID(sfnt.NameIDDesignerURL))
-	fmt.Println("NameIDLicense", nameID(sfnt.NameIDLicense))
-	fmt.Println("NameIDLicenseURL", nameID(sfnt.NameIDLicenseURL))
-	fmt.Println("NameIDTypographicFamily", nameID(sfnt.NameIDTypographicFamily))
-	fmt.Println("NameIDTypographicSubfamily", nameID(sfnt.NameIDTypographicSubfamily))
-	fmt.Println("NameIDCompatibleFull", nameID(sfnt.NameIDCompatibleFull))
-	fmt.Println("NameIDSampleText", nameID(sfnt.NameIDSampleText))
-	fmt.Println("NameIDPostScriptCID", nameID(sfnt.NameIDPostScriptCID))
-	fmt.Println("NameIDWWSFamily", nameID(sfnt.NameIDWWSFamily))
-	fmt.Println("NameIDWWSSubfamily", nameID(sfnt.NameIDWWSSubfamily))
-	fmt.Println("NameIDLightBackgroundPalette", nameID(sfnt.NameIDLightBackgroundPalette))
-	fmt.Println("NameIDDarkBackgroundPalette", nameID(sfnt.NameIDDarkBackgroundPalette))
-	fmt.Println("NameIDVariationsPostScriptPrefix", nameID(sfnt.NameIDVariationsPostScriptPrefix))
+	fontName, err := font.Name(&buf, sfnt.NameIDPostScript)
+	if err != nil {
+		serverError(w, err)
+		return
+	}
+
+	if ok := filenameRX.Match([]byte(fontFamily)); !ok {
+		clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+	if ok := filenameRX.Match([]byte(fontName)); !ok {
+		clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+
+	fontParentDir := strings.ReplaceAll(fontFamily, " ", "-")
+	destDir := filepath.Join(uploadDir, fontParentDir)
+
+	_, err = fileType(destDir)
+	if err != nil {
+		if errors.Is(err, ErrNotExist) {
+			os.Mkdir(destDir, os.ModePerm)
+		} else {
+			serverError(w, err)
+			return
+		}
+	}
+
+	_, err = saveToDisc(file, fontName, ext, destDir)
+	if err != nil {
+		serverError(w, err)
+		return
+	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
