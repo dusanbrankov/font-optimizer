@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"unicode/utf8"
 )
@@ -16,8 +17,8 @@ var (
 	ErrInvalidMediaType = errors.New("malformed media type")
 )
 
-func saveToDisc(file multipart.File, ext string) (string, error) {
-	dst, err := os.CreateTemp(uploadDir, fmt.Sprintf("file-*.%s", ext))
+func saveToDisc(file multipart.File, base string, ext string, destDir string) (string, error) {
+	dst, err := os.Create(filepath.Join(destDir, fmt.Sprintf("%s.%s", base, ext)))
 	if err != nil {
 		return "", err
 	}
