@@ -1,0 +1,25 @@
+NameIDCopyright Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)
+NameIDFamily Noto Sans Thin
+NameIDSubfamily Regular
+NameIDUniqueIdentifier 2.015;GOOG;NotoSans-Thin
+NameIDFull Noto Sans Thin
+NameIDVersion Version 2.015
+NameIDPostScript NotoSans-Thin
+NameIDTrademark Noto is a trademark of Google LLC.
+NameIDManufacturer Monotype Imaging Inc.
+NameIDDesigner Monotype Design Team
+NameIDDescription Designed by Monotype design team, Irene Vlachou.
+NameIDVendorURL http://www.google.com/get/noto/
+NameIDDesignerURL http://www.monotype.com/studio
+NameIDLicense This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org
+NameIDLicenseURL https://openfontlicense.org
+NameIDTypographicFamily Noto Sans
+NameIDTypographicSubfamily Thin
+NameIDCompatibleFull
+NameIDSampleText
+NameIDPostScriptCID
+NameIDWWSFamily
+NameIDWWSSubfamily
+NameIDLightBackgroundPalette
+NameIDDarkBackgroundPalette
+NameIDVariationsPostScriptPrefix NotoSans

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>File Upload in Go</title>
+        <style>
+            html {
+                color-scheme: light dark;
+            }
+            body {
+                font: 400 1.125rem monospace;
+                max-width: fit-content;
+                margin: 2.5rem auto;
+                & > * + * {
+                    margin-top: 1.125em;
+                }
+            }
+            form > * {
+                display: block;
+                margin-top: 0.5em;
+            }
+            button,
+            input,
+            input[type="file"]::file-selector-button {
+                font: inherit;
+            }
+            input[type="file"] {
+                border: 1px dashed currentcolor;
+                padding: 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <form method="POST" action="/file" enctype="multipart/form-data">
+            <label for="font">Font</label>
+            <input type="file" name="font" id="font" />
+            <button type="submit">Upload</button>
+        </form>
+
+        <small style="display: inline-block">Max file size: 2MB </small>
+    </body>
+</html>

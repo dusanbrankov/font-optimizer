@@ -1,0 +1,6 @@
+# ignore all hidden (dot) files in the root directory except for .gitignore
+/.*
+!.gitignore
+
+# directory for storing uploaded files
+/uploads/
