@@ -2,8 +2,7 @@ package main
 
 import (
 	"errors"
-	_ "image/jpeg"
-	_ "image/png"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
