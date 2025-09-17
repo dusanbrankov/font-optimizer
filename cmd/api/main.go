@@ -10,7 +10,8 @@ import (
 const (
 	uploadDir = "uploads"
 
-	maxUploadSize = 2 << 20 // n << 20 == n MB
+	maxFiles      = 10
+	maxUploadSize = (1 << 20) * maxFiles // n << 20 == n MB
 	maxMemory     = 1 << 20
 )
 
