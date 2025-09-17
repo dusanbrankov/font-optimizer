@@ -24,6 +24,11 @@ import (
 
 var filenameRX = regexp.MustCompile(`^[0-9A-Za-z_\-\s]+$`)
 
+var subsets = map[string][]int{
+	"basic-latin":        {0x20, 0x7f},
+	"latin-1-supplement": {0xA0, 0xFF},
+}
+
 func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 	if err := decodePostForm(w, r); err != nil {
 		var maxBytesError *http.MaxBytesError
