@@ -92,10 +92,3 @@ func exists(path string) bool {
 	_, err := os.Stat(path)
 	return !errors.Is(err, os.ErrNotExist)
 }
-
-const (
-	_ = iota
-	isRegular
-	isDir
-	isSymbolic
-)
