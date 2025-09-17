@@ -115,8 +115,9 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 		// TODO: validate destDir against directory traversal (../)
 		destDir := filepath.Join(uploadDir, parent)
 
-		if !exists(destDir) {
-			os.MkdirAll(destDir, 0755)
+		if err := os.MkdirAll(destDir, 0755); err != nil {
+			serverError(w, err)
+			return
 		}
 
 		selectedSubsets := r.PostForm["subsets"]
