@@ -35,16 +35,8 @@ func saveToDisc(file multipart.File, base string, ext string, destDir string) (s
 	return dst.Name(), nil
 }
 
-func getContentType(file multipart.File) (string, error) {
-	sniff := make([]byte, 512)
-	n, err := file.Read(sniff)
-	if err != nil && !errors.Is(err, io.EOF) {
-		return "", err
-	}
-	if _, err = file.Seek(0, io.SeekStart); err != nil {
-		return "", err
-	}
-	return http.DetectContentType(sniff[:n]), nil
+func getMediaType(data []byte) (string, error) {
+	return http.DetectContentType(data), nil
 }
 
 // hasExt reports whether filename ends with one of the provided extensions
