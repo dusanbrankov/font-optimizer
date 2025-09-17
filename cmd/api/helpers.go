@@ -89,6 +89,11 @@ func decodePostForm(w http.ResponseWriter, r *http.Request) error {
 	return r.ParseMultipartForm(maxMemory)
 }
 
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	return !errors.Is(err, os.ErrNotExist)
+}
+
 const (
 	_ = iota
 	isRegular
