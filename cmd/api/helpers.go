@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/fs"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -100,24 +99,3 @@ const (
 	isDir
 	isSymbolic
 )
-
-func fileType(name string) (int, error) {
-	fi, err := os.Lstat(name)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return 0, ErrNotExist
-		}
-		return 0, err
-	}
-
-	switch mode := fi.Mode(); {
-	case mode.IsRegular():
-		return isRegular, nil
-	case mode.IsDir():
-		return isDir, nil
-	case mode&fs.ModeSymlink != 0:
-		return isSymbolic, nil
-	}
-
-	return 0, ErrUnknownFileType
-}

@@ -33,8 +33,20 @@
     </head>
     <body>
         <form method="POST" action="/file" enctype="multipart/form-data">
-            <label for="font">Font</label>
-            <input type="file" name="font" id="font" />
+            <div>
+                <label for="font">Font</label>
+                <input type="file" accept="font/ttf, font/woff, font/woff2" name="font" id="font" multiple />
+            </div>
+
+            <div>
+                <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" />
+                <label for="basic-latin">Latin</label>
+            </div>
+            <div>
+                <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
+                <label for="latin-1-supplement">Latin-1 Supplement</label>
+            </div>
+
             <button type="submit">Upload</button>
         </form>
 

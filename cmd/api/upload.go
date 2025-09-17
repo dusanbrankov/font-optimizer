@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -40,110 +41,139 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, _, err := r.FormFile("font")
-	if err != nil {
-		if errors.Is(err, http.ErrMissingFile) {
-			clientError(w, http.StatusBadRequest)
-		} else {
-			clientError(w, http.StatusBadRequest)
+	fonts := r.MultipartForm.File["font"]
+	if len(fonts) > maxFiles {
+		clientError(w, http.StatusRequestEntityTooLarge)
+		return
+	}
+
+	for _, mf := range fonts {
+		file, err := mf.Open()
+		if err != nil {
+			serverError(w, err)
+			return
 		}
-		return
-	}
-	defer file.Close()
 
-	mediaType, err := getContentType(file)
-	if err != nil {
-		serverError(w, err)
-		return
-	}
+		data, err := io.ReadAll(file)
+		file.Close()
+		if err != nil {
+			serverError(w, err)
+			return
+		}
 
-	switch mediaType {
-	// allowed media types
-	// ref: https://www.iana.org/assignments/media-types/media-types.xhtml#font
-	case "font/ttf", "font/woff", "font/woff2":
-	default:
-		clientError(w, http.StatusUnsupportedMediaType)
-		return
-	}
-
-	// Not required since http.DetectContentType already checks for
-	// the magic bytes.
-	// Can be used for additional validation if needed or to support
-	// custom error messages, such as:
-	// "file signature invalid" vs. "file type invalid"
-	//
-	// if !bytes.HasPrefix(sniff, signatureTTF) {
-	// 	clientError(w, http.StatusUnsupportedMediaType)
-	// 	return
-	// }
-
-	ext, err := fileExt(mediaType)
-	if err != nil {
-		if errors.Is(err, ErrInvalidMediaType) {
+		mediaType, err := getMediaType(data)
+		if err != nil {
+			serverError(w, err)
+			return
+		}
+		switch mediaType {
+		// allowed media types
+		// ref: https://www.iana.org/assignments/media-types/media-types.xhtml#font
+		case "font/ttf", "font/woff", "font/woff2":
+		default:
 			clientError(w, http.StatusUnsupportedMediaType)
-		} else {
-			serverError(w, err)
+			return
 		}
-		return
-	}
 
-	data, err := io.ReadAll(file)
-	if err != nil {
-		serverError(w, err)
-		return
-	}
-
-	font, err := sfnt.Parse(data)
-	if err != nil {
-		serverError(w, err)
-		return
-	}
-
-	var buf sfnt.Buffer
-
-	fontFamily, err := font.Name(&buf, sfnt.NameIDTypographicFamily)
-	if err != nil {
-		if errors.Is(err, sfnt.ErrNotFound) {
-			fontFamily = "Unknown"
-		} else {
+		font, err := sfnt.Parse(data)
+		if err != nil {
 			serverError(w, err)
 			return
 		}
-	}
 
-	fontName, err := font.Name(&buf, sfnt.NameIDPostScript)
-	if err != nil {
-		serverError(w, err)
-		return
-	}
+		var buf sfnt.Buffer
 
-	if ok := filenameRX.Match([]byte(fontFamily)); !ok {
-		clientError(w, http.StatusUnprocessableEntity)
-		return
-	}
-	if ok := filenameRX.Match([]byte(fontName)); !ok {
-		clientError(w, http.StatusUnprocessableEntity)
-		return
-	}
+		family, err := font.Name(&buf, sfnt.NameIDFamily)
+		if err != nil {
+			if errors.Is(err, sfnt.ErrNotFound) {
+				family = "Unknown"
+			} else {
+				serverError(w, err)
+				return
+			}
+		}
 
-	fontParentDir := strings.ReplaceAll(fontFamily, " ", "-")
-	destDir := filepath.Join(uploadDir, fontParentDir)
-
-	_, err = fileType(destDir)
-	if err != nil {
-		if errors.Is(err, ErrNotExist) {
-			os.Mkdir(destDir, os.ModePerm)
-		} else {
-			serverError(w, err)
+		subfamily, err := font.Name(&buf, sfnt.NameIDSubfamily)
+		if err != nil {
+			if errors.Is(err, sfnt.ErrNotFound) {
+				http.Error(w, "cannot read subfamily", http.StatusUnprocessableEntity)
+			} else {
+				serverError(w, err)
+			}
 			return
 		}
-	}
+		if ok := filenameRX.Match([]byte(family)); !ok {
+			clientError(w, http.StatusUnprocessableEntity)
+			return
+		}
+		if ok := filenameRX.Match([]byte(subfamily)); !ok {
+			clientError(w, http.StatusUnprocessableEntity)
+			return
+		}
 
-	_, err = saveToDisc(file, fontName, ext, destDir)
-	if err != nil {
-		serverError(w, err)
-		return
+		parent := strings.ReplaceAll(family, " ", "-")
+		// TODO: validate destDir against directory traversal (../)
+		destDir := filepath.Join(uploadDir, parent)
+
+		if !exists(destDir) {
+			os.MkdirAll(destDir, 0755)
+		}
+
+		selectedSubsets := r.PostForm["subsets"]
+		subsettedFiles := make([]string, 0, len(selectedSubsets))
+
+		for _, v := range selectedSubsets {
+			urange, ok := subsets[v]
+			if !ok {
+				clientError(w, http.StatusBadRequest)
+				return
+			}
+
+			base := fmt.Sprintf("%s-%s", parent, subfamily)
+			filename := fmt.Sprintf("%s.%s.%s", base, v, "woff2")
+
+			savePath := filepath.Join(destDir, filename)
+			if !exists(savePath) {
+				if err := subsetFont(data, savePath, urange); err != nil {
+					os.Remove(savePath)
+					serverError(w, err)
+					return
+				}
+			}
+
+			subsettedFiles = append(subsettedFiles, savePath)
+		}
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func subsetFont(data []byte, dest string, unicodes []int) error {
+	from := fmt.Sprintf("%04X", unicodes[0])
+	to := fmt.Sprintf("%04X", unicodes[1])
+
+	tmp, err := os.CreateTemp("", "font-*")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(tmp.Name())
+
+	if _, err := tmp.Write(data); err != nil {
+		return err
+	}
+	tmp.Close()
+
+	cmd := exec.Command(
+		"pyftsubset",
+		tmp.Name(),
+		fmt.Sprintf("--unicodes=U+%s-%s", from, to),
+		"--flavor=woff2",
+		"--output-file="+dest,
+	)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("pyftsubset: %w\n%s", err, string(out))
+	}
+
+	return nil
 }
