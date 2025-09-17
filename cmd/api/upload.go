@@ -122,6 +122,8 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 		selectedSubsets := r.PostForm["subsets"]
 		subsettedFiles := make([]string, 0, len(selectedSubsets))
 
+		var savePath, filename string
+
 		for _, v := range selectedSubsets {
 			urange, ok := subsets[v]
 			if !ok {
@@ -130,9 +132,10 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			base := fmt.Sprintf("%s-%s", parent, subfamily)
-			filename := fmt.Sprintf("%s.%s.%s", base, v, "woff2")
 
-			savePath := filepath.Join(destDir, filename)
+			filename = fmt.Sprintf("%s.%s.%s", base, v, "woff2")
+			savePath = filepath.Join(destDir, filename)
+
 			if !exists(savePath) {
 				if err := subsetFont(data, savePath, urange); err != nil {
 					os.Remove(savePath)
@@ -143,9 +146,11 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 			subsettedFiles = append(subsettedFiles, savePath)
 		}
-	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+		w.Header().Set("Content-Type", "font/woff2")
+		w.Header().Set("Content-Disposition", "attachment; filename="+filename)
+		http.ServeFile(w, r, savePath)
+	}
 }
 
 func subsetFont(data []byte, dest string, unicodes []int) error {
