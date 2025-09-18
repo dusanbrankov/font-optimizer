@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+@use "base/root";
+@use "base/reset";
+@use "base/normalize";
+@use "base/fonts";
+@use "base/global";
+@use "base/utils";
+
+@use "layout/header";
+@use "layout/footer";

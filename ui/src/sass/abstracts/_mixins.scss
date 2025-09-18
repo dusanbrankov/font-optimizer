@@ -1,0 +1,21 @@
+/*-----------------------------------------*
+  #BREAK POINTS
+ *-----------------------------------------*/
+
+@mixin break-min($width) {
+  @media screen and (min-width: $width) {
+    @content
+  }
+}
+
+@mixin break-max($width) {
+  @media screen and (max-width: ($width - 0.0625em)) {
+    @content
+  }
+}
+
+@mixin break-min-max($min-width, $max-width) {
+  @media screen and (min-width: $min-width) and (max-width: ($max-width - 0.0625em)) {
+    @content
+  }
+}

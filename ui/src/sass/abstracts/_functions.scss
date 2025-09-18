@@ -1,0 +1,9 @@
+@use "sass:math";
+
+@function px-to-rem($px, $base: 16) {
+  @if not math.is-unitless($px) {
+    @error "expecting unitless value, but got #{$px}";
+  }
+
+  @return math.div($px, $base) * 1rem;
+}

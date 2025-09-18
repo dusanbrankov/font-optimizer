@@ -1,0 +1,24 @@
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 32px 144px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.099em;
+}
+
+.logo {
+  width: 212px;
+  height: auto;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

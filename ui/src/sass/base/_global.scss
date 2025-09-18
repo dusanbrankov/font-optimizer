@@ -1,0 +1,160 @@
+@use "../abstracts" as abs;
+
+::selection {
+  color: var(--bg);
+  background-color: var(--fg);
+}
+
+html {
+  scrollbar-color: var(--clr-primary) #242121;
+}
+
+body {
+  font-family: abs.$font-stack;
+  line-height: 1.6;
+  color: var(--fg);
+  letter-spacing: 0.025em;
+  background-color: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.8;
+}
+
+button {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+hgroup {
+  margin: 4.125rem 0 1.5rem;
+}
+
+.submit {
+  margin-top: 2.25rem;
+
+  >p {
+    color: #555;
+    margin-top: 1.125rem;
+  }
+}
+
+h1,
+h2 {
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.012em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.125rem;
+}
+
+form>* {
+  display: block;
+  margin-top: 1.125em;
+}
+
+button,
+input,
+input[type="file"]::file-selector-button {
+  font: inherit;
+  margin-right: 20px;
+}
+
+input[type=file] {
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: 0.5em;
+  width: 350px;
+  max-width: 100%;
+  /* color: #eee; */
+  padding: 5px;
+  background: transparent;
+}
+
+button,
+input[type=file]::file-selector-button {
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  border: none;
+  padding: 12px 20px;
+  background: var(--fg);
+  border-radius: 4px;
+  color: var(--bg);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover,
+input[type=file]::file-selector-button:hover {
+  background: #282828;
+}
+
+// TODO ...
+
+.glyphs {
+  >*+* {
+    margin-top: 0.125em;
+  }
+}
+
+.drop-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px dashed #555;
+  color: #444;
+  cursor: pointer;
+  transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+.drop-container:hover {
+  background: #eee;
+  border-color: #111;
+}
+
+.drop-container:hover .drop-title {
+  color: #222;
+}
+
+.drop-title {
+  color: #444;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  transition: color .2s ease-in-out;
+}
+
+.drop-container.drag-active {
+  background: #eee;
+  border-color: #111;
+}
+
+.drop-container.drag-active .drop-title {
+  color: #222;
+}

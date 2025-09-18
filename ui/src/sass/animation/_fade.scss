@@ -1,0 +1,44 @@
+$start-time:         200ms;
+$delay:              $start-time;
+$duration:           800ms;
+$interval:           300ms;
+$interval-increment: 85ms;
+
+@mixin init-state {
+	translate: 0 -8px;
+	opacity: 0;
+}
+@mixin final-state {
+	translate: 0 0;
+	opacity: 1;
+}
+
+[class*="fade-in-"] {
+	animation-name: fadein;
+	animation-duration: $duration;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+	@include init-state;
+}
+
+@for $i from 0 through 3 {
+	.fade-in-#{$i} {
+		animation-delay: $delay;
+	}
+	@if $i == 0 {
+		$delay: $delay + $interval;
+	} @else {
+		$delay: $delay + $interval*1.62;
+		// $delay: $delay + $interval + $interval-increment;
+		// $interval-increment: calc($interval-increment * 1.62);
+	}
+}
+
+@keyframes fadein {
+	from {
+		@include init-state;
+	}
+	to {
+		@include final-state;
+	}
+}
