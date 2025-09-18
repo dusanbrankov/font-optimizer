@@ -152,10 +152,19 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 			subsettedFonts = append(subsettedFonts, savePath)
 		}
 
-		w.Header().Set("Content-Type", "font/woff2")
-		w.Header().Set("Content-Disposition", "attachment; filename="+filename)
-		http.ServeFile(w, r, savePath)
 	}
+
+	downloadName := fmt.Sprintf("%s.zip", randStr(12))
+
+	if err := createZip(downloadName, subsettedFonts...); err != nil {
+		serverError(w, err)
+		return
+	}
+	defer os.Remove(downloadName)
+
+	w.Header().Set("Content-Type", "application/zip")
+	w.Header().Set("Content-Disposition", "attachment; filename="+downloadName)
+	http.ServeFile(w, r, downloadName)
 }
 
 func subsetFont(data []byte, dest string, unicodes []int) error {

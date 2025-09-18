@@ -1,6 +1,9 @@
 package main
 
 import (
+	"archive/zip"
+	"crypto/rand"
+	"encoding/base32"
 	"errors"
 	"fmt"
 	"io"
@@ -91,4 +94,41 @@ func decodePostForm(w http.ResponseWriter, r *http.Request) error {
 func exists(path string) bool {
 	_, err := os.Stat(path)
 	return !errors.Is(err, os.ErrNotExist)
+}
+
+func createZip(dest string, files ...string) error {
+	out, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	zw := zip.NewWriter(out)
+	defer zw.Close()
+
+	for _, file := range files {
+		f, err := os.Open(file)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		w, err := zw.Create(filepath.Join("font-optimizer", filepath.Base(file)))
+		if err != nil {
+			return err
+		}
+
+		if _, err := io.Copy(w, f); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func randStr(l int) string {
+	bytes := make([]byte, l)
+	rand.Read(bytes)
+	// return without padding and lowercase
+	return strings.ToLower(base32.StdEncoding.EncodeToString(bytes)[:l])
 }
