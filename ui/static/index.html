@@ -13,32 +13,9 @@
         <meta name="apple-mobile-web-app-title" content="MyWebSite" />
         <link rel="manifest" href="/static/img/favicon/site.webmanifest" />
 
-        <style>
-            html {
-                color-scheme: light dark;
-            }
-            body {
-                font: 400 1.125rem monospace;
-                max-width: fit-content;
-                margin: 2.5rem auto;
-                & > * + * {
-                    margin-top: 1.125em;
-                }
-            }
-            form > * {
-                display: block;
-                margin-top: 0.5em;
-            }
-            button,
-            input,
-            input[type="file"]::file-selector-button {
-                font: inherit;
-            }
-            input[type="file"] {
-                border: 1px dashed currentcolor;
-                padding: 0.5em;
-            }
-        </style>
+        <link rel="stylesheet" href="/static/css/main.min.css" />
+
+        <script src="/static/js/main.min.js" defer></script>
     </head>
     <body>
         <form method="POST" action="/file" enctype="multipart/form-data">
