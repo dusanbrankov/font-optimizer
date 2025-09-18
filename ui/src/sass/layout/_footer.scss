@@ -4,7 +4,7 @@ body {
   display: flex;
   flex-direction: column;
 
-  & > footer {
+  &>footer {
     margin-top: auto;
   }
 }
@@ -12,4 +12,9 @@ body {
 footer {
   padding-block-end: 22px;
   color: #bebebe;
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: #555;
 }

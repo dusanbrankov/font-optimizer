@@ -18,24 +18,42 @@
         <script src="/static/js/main.min.js" defer></script>
     </head>
     <body>
-        <form method="POST" action="/file" enctype="multipart/form-data">
-            <div>
-                <label for="font">Font</label>
-                <input type="file" accept="font/ttf, font/woff, font/woff2" name="font" id="font" multiple />
-            </div>
+        <header class="container site-header">
+          <h1>Font Optimizer</h1>
+        </header>
+        <main class="container">
+            <form method="POST" action="/file" enctype="multipart/form-data">
+                <label for="font" id="drop-container" class="drop-container">
+                    <span class="drop-title">Drop fonts here</span>
+                    <span>Up to 10 fonts, max. 1 MB each</span>
+                    or
+                    <input type="file" id="images" accept="font/ttf, font/woff, font/woff2" required multiple name="font" />
+                </label>
 
-            <div>
-                <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" />
-                <label for="basic-latin">Latin</label>
-            </div>
-            <div>
-                <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
-                <label for="latin-1-supplement">Latin-1 Supplement</label>
-            </div>
+                <div class="glyphs">
+                    <h2>Choose Glyphs</h2>
+                    <div>
+                        <div>
+                            <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" />
+                            <label for="basic-latin">Basic Latin</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
+                            <label for="latin-1-supplement">Latin-1 Supplement</label>
+                        </div>
+                    </div>
+                </div>
 
-            <button type="submit">Upload</button>
-        </form>
+                <div class="submit">
+                    <button type="submit">Upload</button>
+                    <p>Upload your font files and select the glyphs you want to keep. The optimized fonts will be available for download after processing.</p>
+                </div>
+            </form>
 
-        <small style="display: inline-block">Max file size: 2MB </small>
+        </main>
+
+        <footer class="container">
+            <span class="copyright">&copy; 2025 Font Optimizer</span>
+        </footer>
     </body>
 </html>

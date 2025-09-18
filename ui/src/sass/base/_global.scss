@@ -6,7 +6,7 @@
 }
 
 html {
-  scrollbar-color: var(--clr-primary) #242121;
+  scrollbar-color: var(--fg) var(--bg);
 }
 
 body {
@@ -39,11 +39,6 @@ button {
   cursor: pointer;
 }
 
-
-hgroup {
-  margin: 4.125rem 0 1.5rem;
-}
-
 .submit {
   margin-top: 2.25rem;
 
@@ -66,11 +61,6 @@ h1 {
 
 h2 {
   font-size: 1.125rem;
-}
-
-form>* {
-  display: block;
-  margin-top: 1.125em;
 }
 
 button,
