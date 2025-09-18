@@ -1,0 +1,30 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:sass": "sass --no-source-map -w src/sass/main.scss static/css/main.min.css",
+    "dev:js": "esbuild src/js/main.js --bundle --outfile=static/js/main.min.js --watch",
+    "dev": "npm-run-all --parallel dev:*",
+    "build:sass": "sass --no-source-map -s compressed src/sass/main.scss static/css/main.min.css",
+    "build:pcss": "postcss -u autoprefixer --no-map -r static/css/main.min.css",
+    "build:js": "esbuild src/js/main.js --bundle --minify --outfile=static/js/main.min.js",
+    "build": "npm-run-all build:sass build:pcss build:js"
+  },
+  "browserslist": [
+    "> 0.2% and not dead"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "esbuild": "0.21.4",
+    "npm-run-all2": "^6.2.0",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "sass": "^1.56.2"
+  },
+  "keywords": [],
+  "author": "Dušan Brankov <dusanbrankov@proton.me>",
+  "license": "ISC",
+  "description": ""
+}
