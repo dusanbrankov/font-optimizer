@@ -5,12 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:sass": "sass --no-source-map -w src/sass/main.scss static/css/main.min.css",
-    "dev:js": "esbuild src/js/main.js --bundle --outfile=static/js/main.min.js --watch",
+    "dev:esbuild": "esbuild src/js/main.js --bundle --outfile=static/js/main.min.js --watch",
     "dev": "npm-run-all --parallel dev:*",
     "build:sass": "sass --no-source-map -s compressed src/sass/main.scss static/css/main.min.css",
     "build:pcss": "postcss -u autoprefixer --no-map -r static/css/main.min.css",
-    "build:js": "esbuild src/js/main.js --bundle --minify --outfile=static/js/main.min.js",
-    "build": "npm-run-all build:sass build:pcss build:js"
+    "build:esbuild": "esbuild src/js/main.js --bundle --minify --outfile=static/js/main.min.js",
+    "build": "npm-run-all build:*"
   },
   "browserslist": [
     "> 0.2% and not dead"
