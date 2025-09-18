@@ -8,3 +8,6 @@
 # frontend
 node_modules/
 *.min.*
+*.ttf
+*.woff
+*.woff2
