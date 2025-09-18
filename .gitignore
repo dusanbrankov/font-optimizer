@@ -4,3 +4,7 @@
 
 # directory for storing uploaded files
 /uploads/
+
+# frontend
+node_modules/
+*.min.*
