@@ -1,15 +1,14 @@
 /* Sticky footer */
-
 body {
   display: flex;
   flex-direction: column;
 
-  &>footer {
+  .site-footer {
     margin-top: auto;
   }
 }
 
-footer {
+.site-footer {
   padding-block-end: 22px;
   color: #bebebe;
 }
