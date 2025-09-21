@@ -41,7 +41,7 @@ func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fonts := r.MultipartForm.File["font"]
+	fonts := r.MultipartForm.File["font_uploads"]
 	if len(fonts) > maxFiles {
 		clientError(w, http.StatusRequestEntityTooLarge)
 		return
@@ -185,9 +185,11 @@ func subsetFont(data []byte, dest string, unicodes []int) error {
 	cmd := exec.Command(
 		"pyftsubset",
 		tmp.Name(),
-		fmt.Sprintf("--unicodes=U+%s-%s", from, to),
 		"--flavor=woff2",
 		"--output-file="+dest,
+		"--layout-features='*'",
+		"--drop-tables=",
+		fmt.Sprintf("--unicodes=U+%s-%s", from, to),
 	)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
