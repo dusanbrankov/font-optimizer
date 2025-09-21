@@ -7,7 +7,10 @@
 
 # frontend
 node_modules/
+
+#fonts
 *.min.*
 *.ttf
 *.woff
 *.woff2
+!/ui/static/fonts/IBMPlexSans/*

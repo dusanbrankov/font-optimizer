@@ -1,32 +1,11 @@
 @use "../abstracts" as abs;
 
-$font-weights: (
-  "Regular": 400,
-  "Medium": 500,
-  "SemiBold": 600,
-  "Bold": 700,
-  "ExtraBold": 800,
-  "Black": 900,
-);
-
-@each $weight, $value in $font-weights {
-  @font-face {
-    font-family: abs.$base-font;
-    src: url("../fonts/#{abs.$base-font}/#{abs.$base-font}-#{$weight}.woff2") format("woff2"),
-    url("../fonts/#{abs.$base-font}-#{$weight}.woff") format("woff");
-    font-weight: #{$value};
-    font-style: normal;
-    font-display: swap;
-  }
+@font-face {
+  font-family: "PlexSansVar";
+  src: url("../fonts/IBMPlexSans/IBMPlexSans-VariableFont.woff2")
+    format("woff2");
+  font-weight: 100 700;
+  font-stretch: 75% 100%;
+  font-style: normal;
+  font-display: swap;
 }
-
-// @each $weight, $value in font-weights {
-//   @font-face {
-//     font-family: $base-font;
-//     src: url("../fonts/#{$base-font}-#{$weight}Italic.woff2") format("woff2"),
-//     url("../fonts/#{$base-font}-#{$weight}Italic.woff") format("woff");
-//     font-weight: #{$value};
-//     font-style: italic;
-//     font-display: swap;
-//   }
-// }
