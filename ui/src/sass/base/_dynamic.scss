@@ -1,0 +1,13 @@
+@use "../abstracts" as abs;
+
+.file-name {
+  font-weight: 600;
+}
+
+.file-size {
+}
+
+.preview li {
+  margin-bottom: 0.5em;
+  font-size: var(--font-size-30);
+}
