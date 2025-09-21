@@ -1,3 +1,5 @@
+@use "functions" as abs;
+
 /*-----------------------------------------*
   #BREAK POINTS
  *-----------------------------------------*/
@@ -17,5 +19,13 @@
 @mixin break-min-max($min-width, $max-width) {
   @media screen and (min-width: $min-width) and (max-width: ($max-width - 0.0625em)) {
     @content
+  }
+}
+
+@mixin bg($shade: dark, $hover: "&:hover") {
+  background-color: abs.bg-color($shade);
+
+  #{$hover} {
+    --l-delta: 5%;
   }
 }
