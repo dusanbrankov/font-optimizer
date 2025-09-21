@@ -24,4 +24,12 @@
     --shade-#{$i}: hsl(from var(--base-color) h s #{$i*1%});
     $i: $i + $step;
   }
+
+  --font-size-30: 0.875rem;
+  --font-size-40: 1rem;
+  --font-size-50: 1.125rem;
+  --font-size-60: 1.25rem;
+  --font-size-70: 1.5rem;
+  --font-size-80: 2rem;
+  --font-size-90: 2.75rem;
 }
