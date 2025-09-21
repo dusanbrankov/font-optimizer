@@ -7,3 +7,15 @@
 
   @return math.div($px, $base) * 1rem;
 }
+
+@function hsl-color($shade: dark, $type: accent) {
+  @if not $shade == dark or not $shade == light {
+    @error "expecting 'dark' or 'light', but got '#{$shade}'"
+  }
+
+  @if not $type == accent or not $shade == base {
+    @error "expecting 'accent' or 'base', but got '#{$type}'"
+  }
+
+  @return hsl(from var(--#{$type}-color) h s calc(var(--shade-#{$shade}) - var(--l-delta, 0%)));
+}
