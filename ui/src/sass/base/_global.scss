@@ -1,8 +1,8 @@
 @use "../abstracts" as abs;
 
 ::selection {
-  color: var(--bg);
-  background-color: var(--fg);
+  color: inherit;
+  background-color: abs.hsl-color(light, base);
 }
 
 html {

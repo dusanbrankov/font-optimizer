@@ -1,6 +1,27 @@
 :root {
-  --bg: #f5f5f5;
-  --fg: #000;
+  --h: 210deg;
+  --s: 10%;
+  --l: 50%;
 
-  --color-light: #555;
+  --base-color: hsl(var(--h) var(--s) var(--l));
+  --accent-color: hsl(from var(--base-color) h 25% l);
+
+  --bg: #fdfcfb;
+  --fg: hsl(from var(--accent-color) h s 10%);
+
+  --shade-light: 90%;
+  --shade-dark: 35%;
+
+  --text-light: var(--shade-55);
+  --text-dark: var(--shade-35);
+
+  $min: 10;
+  $max: 90;
+  $step: 5;
+
+  $i: $min;
+  @while $i <= $max {
+    --shade-#{$i}: hsl(from var(--base-color) h s #{$i*1%});
+    $i: $i + $step;
+  }
 }
