@@ -23,7 +23,7 @@
 }
 
 @mixin bg($shade: dark, $hover: "&:hover") {
-  background-color: abs.bg-color($shade);
+  background-color: abs.hsl-color($shade);
 
   #{$hover} {
     --l-delta: 5%;

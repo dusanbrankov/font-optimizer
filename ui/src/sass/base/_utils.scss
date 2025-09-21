@@ -11,15 +11,6 @@ https://piccalil.li/tutorial/creating-a-full-bleed-css-utility/ */
   margin-inline: auto;
 }
 
-body:has(.full-bleed) {
-  overflow-x: hidden;
-}
-
-.full-bleed {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-}
-
 /* ACCESSIBILITY */
 
 /* Visually hide element, but keep it accessible for screen
@@ -35,62 +26,20 @@ readers */
   overflow: hidden;
 }
 
-.small-cap {
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 0.099em;
-}
+$space-units: (
+  "2xs": 4,
+  "xs": 8,
+  "s": 12,
+  "m": 16,
+  "l": 24,
+  "xl": 32,
+  "2xl": 40,
+  "3xl": 48,
+  "4xl": 56,
+);
 
-.auto-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 24px;
-
-  > :nth-child(1) {
-    grid-column: 1/5;
-    padding-left: max(24px, 3vw);
-  }
-
-  > :nth-child(2) {
-    grid-column: 5/11;
-  }
-}
-
-// .flow > *:not(:last-child) {
-//   margin-bottom: var(--flow-gap, 24px);
-// }
-
-$sizes: "4", "8", "12", "16", "20", "24", "28", "32", "36", "40", "44", "48";
-
-@each $size in $sizes {
+@each $size, $n in $space-units {
   .flow-#{$size}>*:not(:last-child) {
-    margin-bottom: #{$size}px;
-  }
-}
-
-.content-extended {
-  font-size: a.px-to-rem(20);
-  max-width: 65ch;
-}
-
-.content-default {
-  font-size: a.px-to-rem(24);
-
-  a {
-    display: block;
-    width: fit-content;
-    transition: color 185ms ease-out;
-
-    &:hover {
-      color: var(--clr-primary)
-    }
-  }
-}
-
-.date {
-  margin-block: 20px;
-
-  span {
-    font-weight: 600;
+    margin-bottom: a.px-to-rem($n);
   }
 }
