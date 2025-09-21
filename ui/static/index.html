@@ -20,40 +20,97 @@
 </head>
 
 <body>
-  <header class="container site-header">
-    <h1 class="logo">Font Optimizer</h1>
-  </header>
-  <main class="container">
-    <form method="POST" action="/file" enctype="multipart/form-data">
-      <label for="font" id="drop-container" class="drop-container">
-        <span class="drop-title">Drop fonts here</span>
-        <span>Up to 10 fonts, max. 1 MB each</span>
-        or
-        <input type="file" id="images" accept="font/ttf, font/woff, font/woff2" required multiple name="font" />
-      </label>
-
-      <div class="glyphs">
-        <h2>Choose Glyphs</h2>
-        <div>
-          <div>
-            <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" />
-            <label for="basic-latin">Basic Latin</label>
-          </div>
-          <div>
-            <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
-            <label for="latin-1-supplement">Latin-1 Supplement</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="submit">
-        <button type="submit">Upload</button>
+  <div class="flow-xl">
+    <header class="container site-header">
+      <hgroup class="flow-s">
+        <h1 class="logo">Font Subset Generator</h1>
         <p>Upload your font files and select the glyphs you want to keep. The optimized fonts will be available for
           download after processing.</p>
-      </div>
-    </form>
+      </hgroup>
+    </header>
 
-  </main>
+    <main class="container">
+      <form method="POST" action="/file" enctype="multipart/form-data" class="flow-m">
+        <div class="upload">
+          <div class="upload-content flow-s">
+            <div class="upload-btn">
+              <svg viewBox="0 0 21 21" width="21" height="21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  transform="translate(2 5)">
+                  <path
+                    d="m8.5.5c2.7614237 0 5 2.23857625 5 5 0 .48543539-.0691781.95471338-.1982137 1.39851335.3339576-.25026476.748773-.39851335 1.1982137-.39851335 1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2c-1.104407 0-10.16182706 0-11 0-1.65685425 0-3-1.34314575-3-3s1.34314575-3 3-3c.03335948 0 .06659179.00054449.09968852.00162508.46264217-2.28304993 2.48077946-4.00162508 4.90031148-4.00162508z" />
+                  <path d="m6.5 4.5 2-2 2 2" />
+                  <path d="m8.5 2.5v6" />
+                </g>
+              </svg>
+              <label for="font_uploads">Browse or drag fonts here</label>
+            </div>
+            <p class="upload-info">Up to 10 fonts, max. 1 MB each</p>
+          </div>
+          <input type="file" id="font_uploads" name="font_uploads" accept="font/ttf, font/woff, font/woff2" multiple
+            required>
+        </div>
+
+        <div class="preview"></div>
+
+        <div class="flow-xl">
+          <div class="flow-m">
+            <fieldset class="glyphs flow-s">
+              <legend class="glyphs-heading">Choose Glyphs</legend>
+
+              <div class="glyph-sets flow-s">
+                <div class="glyph-set">
+                  <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" checked />
+                  <label for="basic-latin">Basic Latin</label>
+                </div>
+
+                <div class="glyph-set">
+                  <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
+                  <label for="latin-1-supplement">Latin-1 Supplement</label>
+                </div>
+
+                <p class="more-glyphs">
+                  <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd" transform="translate(2 2)">
+                      <circle cx="8.5" cy="8.5" r="8" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path
+                        d="m8.5 9.5c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm-4 0c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm8 0c.5 0 1-.5 1-1s-.5-1-1-1-.9988403.5-.9988403 1 .4988403 1 .9988403 1z"
+                        fill="currentColor" />
+                    </g>
+                  </svg>
+                  <span>Show all</span>
+                </p>
+              </div>
+            </fieldset>
+
+            <fieldset class="glyphs flow-s">
+              <legend class="glyphs-heading">Output Format</legend>
+
+              <div class="output-files">
+                <div class="output-file">
+                  <input type="checkbox" name="output" id="output-woff2" value="woff2" checked />
+                  <label for="output-woff2">WOFF2</label>
+                </div>
+
+                <div class="output-file">
+                  <input type="checkbox" name="output" id="output-woff" value="woff" />
+                  <label for="output-woff">WOFF</label>
+                </div>
+
+                <div class="output-file">
+                  <input type="checkbox" name="output" id="output-ttf" value="ttf" />
+                  <label for="output-ttf">TTF</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <button type="submit" class="upload-submit-btn">Generate</button>
+        </div>
+      </form>
+    </main>
+  </div>
 
   <footer class="container site-footer">
     <span class="copyright">&copy; 2025 Font Optimizer</span>
