@@ -1,9 +1,13 @@
 .site-header {
-  margin-block: 4.125rem 1.5rem;
+  margin-block: 3.5rem 0.75rem;
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.75em;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.012em;
+  color: hsl(from var(--accent-color) h s 35%);
 }
 
 @keyframes fadein {
