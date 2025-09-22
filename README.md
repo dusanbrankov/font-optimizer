@@ -1,14 +1,16 @@
 # Font Subset Generator
 
-This is a web tool that subsets and converts fonts to create smaller files and improve performance.
+This is a web tool for subsetting and converting fonts, resulting in smaller files and improved web performance.
 
 > [!NOTE]
 > This project is still under development.
 
-## Build and run
+**Live Demo**: https://fsg.dbran.cc/
+
+## Development
 
 ```sh
-make
+make help
 # Usage:
 #  help        print this help message
 #  init        initialize the project
