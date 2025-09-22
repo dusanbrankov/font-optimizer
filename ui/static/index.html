@@ -32,7 +32,7 @@
     <main class="container">
       <form method="POST" action="/file" enctype="multipart/form-data" class="flow-m">
         <div class="upload">
-          <div class="upload-content flow-s">
+          <div class="upload-content flow-2xs">
             <div class="upload-btn">
               <svg viewBox="0 0 21 21" width="21" height="21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -55,50 +55,61 @@
 
         <div class="flow-xl">
           <div class="flow-m">
-            <fieldset class="glyphs flow-s">
-              <legend class="glyphs-heading">Choose Glyphs</legend>
+            <fieldset class="flow-s">
+              <legend class="form-section-heading">Choose Glyphs</legend>
 
-              <div class="glyph-sets flow-s">
-                <div class="glyph-set">
-                  <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" checked />
-                  <label for="basic-latin">Basic Latin</label>
+              <div class="flow-s">
+                <div class="options glyph-options">
+                  <div class="option">
+                    <input type="checkbox" name="subsets" id="basic-latin" value="basic-latin" checked />
+                    <label for="basic-latin">Basic Latin</label>
+                  </div>
+                  <div class="option">
+                    <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
+                    <label for="latin-1-supplement">Latin-1 Supplement</label>
+                  </div>
+                  <div class="option">
+                    <input type="checkbox" name="subsets" id="latin-extended-a" value="latin-extended-a" />
+                    <label for="latin-extended-a">Latin Extended-A</label>
+                  </div>
+                  <div class="option">
+                    <input type="checkbox" name="subsets" id="latin-extended-b" value="latin-extended-b" />
+                    <label for="latin-extended-b">Latin Extended-B</label>
+                  </div>
                 </div>
 
-                <div class="glyph-set">
-                  <input type="checkbox" name="subsets" id="latin-1-supplement" value="latin-1-supplement" />
-                  <label for="latin-1-supplement">Latin-1 Supplement</label>
-                </div>
-
-                <p class="more-glyphs">
-                  <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" transform="translate(2 2)">
-                      <circle cx="8.5" cy="8.5" r="8" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                      <path
-                        d="m8.5 9.5c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm-4 0c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm8 0c.5 0 1-.5 1-1s-.5-1-1-1-.9988403.5-.9988403 1 .4988403 1 .9988403 1z"
-                        fill="currentColor" />
-                    </g>
-                  </svg>
-                  <span>Show all</span>
+                <p>
+                  <a href="#0" class="options-expand">
+                    <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                      <g fill="none" fill-rule="evenodd" transform="translate(2 2)">
+                        <circle cx="8.5" cy="8.5" r="8" stroke="currentColor" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                        <path
+                          d="m8.5 9.5c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm-4 0c.5 0 1-.5 1-1s-.5-1-1-1-.99884033.5-.99884033 1 .49884033 1 .99884033 1zm8 0c.5 0 1-.5 1-1s-.5-1-1-1-.9988403.5-.9988403 1 .4988403 1 .9988403 1z"
+                          fill="currentColor" />
+                      </g>
+                    </svg>
+                    <span>Show all</span>
+                  </a>
                 </p>
               </div>
             </fieldset>
 
-            <fieldset class="glyphs flow-s">
-              <legend class="glyphs-heading">Output Format</legend>
+            <fieldset class="flow-s">
+              <legend class="form-section-heading">Output Format</legend>
 
-              <div class="output-files">
-                <div class="output-file">
+              <div class="options format-options">
+                <div class="option">
                   <input type="checkbox" name="output" id="output-woff2" value="woff2" checked />
                   <label for="output-woff2">WOFF2</label>
                 </div>
 
-                <div class="output-file">
+                <div class="option">
                   <input type="checkbox" name="output" id="output-woff" value="woff" />
                   <label for="output-woff">WOFF</label>
                 </div>
 
-                <div class="output-file">
+                <div class="option">
                   <input type="checkbox" name="output" id="output-ttf" value="ttf" />
                   <label for="output-ttf">TTF</label>
                 </div>
