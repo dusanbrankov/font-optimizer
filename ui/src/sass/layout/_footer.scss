@@ -1,3 +1,5 @@
+@use "../abstracts" as abs;
+
 /* Sticky footer */
 body {
   display: flex;
@@ -11,6 +13,10 @@ body {
 .site-footer {
   padding-block-end: 22px;
   color: #bebebe;
+}
+
+.site-footer-container {
+  margin-block-start: abs.px-to-rem(32);
 }
 
 .copyright {
