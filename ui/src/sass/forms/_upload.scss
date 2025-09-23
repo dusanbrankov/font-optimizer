@@ -8,7 +8,11 @@
   border-radius: abs.px-to-rem(6);
   user-select: none;
 
-  @include abs.bg(light);
+  background-color: hsl(from var(--accent-color) h s calc(var(--shade-light) - var(--l-delta, 0%)) / 35%);
+
+  &:hover {
+    --l-delta: 5%;
+  }
 }
 
 .upload input[type=file] {
@@ -49,7 +53,6 @@
 .upload-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   margin: 0 auto 0;
   border-radius: 6px;
   border-radius: 0.125em;
@@ -57,9 +60,8 @@
   pointer-events: none;
 
   svg {
-    width: 40px;
-    height: auto;
-    color: currentColor;
+    fill: hsl(from var(--accent-color) h s l / 75%);
+    width: 3em;
   }
 }
 
